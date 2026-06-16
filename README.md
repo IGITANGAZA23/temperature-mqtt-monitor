@@ -69,7 +69,7 @@ python pc_client/app.py
 ![LCD Display](screenshots/1.Uploading%20for%20Temperature%20Reading%20and%20LCD%20Display.png)
 
 ### 2. PC Monitoring & MQTT Transmission
-![PC Client Monitoring](screenshots/2.Succesful%20PC%20Monitoring%20and%20MQTT%20Transmission%20in%20real%20time.png)
+![PC Client Monitoring](screenshots/2.Succesful%20PC%20Monitoring%20and%20MQTT%20Transmission%20+%20VPS%20in%20real%20time.png)
 
 ## 📡 Communication Details
 *   **Serial Interface**: 
