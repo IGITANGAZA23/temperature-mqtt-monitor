@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Temp Monitor | IGITANGAZA</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00f2ff;
+            --bg: #0a0b10;
+            --card: #161b22;
+            --text: #e6edf3;
+            --accent: #238636;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+        }
+
+        .status-badge {
+            margin-top: 10px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            background: #30363d;
+        }
+
+        .status-online { color: #3fb950; border: 1px solid #3fb950; }
+        .status-offline { color: #f85149; border: 1px solid #f85149; }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid #30363d;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        .temp-display {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5rem;
+            color: var(--primary);
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .unit { font-size: 2rem; vertical-align: top; margin-left: 5px; }
+
+        .metric-label {
+            color: #8b949e;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+        }
+
+        .log-container {
+            max-height: 300px;
+            overflow-y: auto;
+            text-align: left;
+            padding: 1rem;
+            background: #0d1117;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid #21262d;
+            color: #7d8590;
+        }
+
+        .log-entry span { color: var(--primary); }
+
+        /* Fancy Loader Animation */
+        .loader {
+            width: 100px;
+            height: 100px;
+            border: 5px solid #30363d;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        footer {
+            margin-top: auto;
+            padding: 2rem;
+            color: #484f58;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>IGITANGAZA VPS Dashboard</h1>
+        <div id="status" class="status-badge status-offline">DISCONNECTED</div>
+    </div>
+
+    <div class="dashboard-grid">
+        <!-- Part 1: Main Gauge -->
+        <div class="card">
+            <p class="metric-label">Current Temperature</p>
+            <div id="temp" class="temp-display">--<span class="unit">°C</span></div>
+            <p id="timestamp" style="color: #8b949e;">Waiting for payload...</p>
+        </div>
+
+        <!-- Part 2: Live Metrics Log -->
+        <div class="card">
+            <p class="metric-label">Telemetry Stream</p>
+            <div id="logs" class="log-container">
+                <div class="log-entry">Initializing socket connection...</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        System Pipeline: DHT11 → Arduino → USB Serial → Python Gateway → VPS MQTT → Web Dashboard
+    </footer>
+
+    <script>
+        // Configuration
+        const BROKER_IP = "157.173.101.159";
+        const TOPIC = "igitangaza/temperature";
+        
+        // Connect via WebSockets (Port 9001 is standard for MQTT over WS)
+        const client = mqtt.connect(`ws://${BROKER_IP}:9001`);
+
+        const statusLabel = document.getElementById('status');
+        const tempLabel = document.getElementById('temp');
+        const logsContainer = document.getElementById('logs');
+        const timeLabel = document.getElementById('timestamp');
+
+        client.on('connect', () => {
+            statusLabel.innerText = "ONLINE";
+            statusLabel.className = "status-badge status-online";
+            addLog("✅ Connected to VPS Broker");
+            client.subscribe(TOPIC);
+            addLog(`📡 Subscribed to: ${TOPIC}`);
+        });
+
+        client.on('message', (topic, message) => {
+            const payload = message.toString();
+            const now = new Date().toLocaleTimeString();
+            
+            // Update UI
+            tempLabel.innerHTML = `${payload}<span class="unit">°C</span>`;
+            timeLabel.innerText = `Last update: ${now}`;
+            
+            addLog(`Received: <span>${payload}°C</span> at ${now}`);
+        });
+
+        client.on('error', (err) => {
+            statusLabel.innerText = "ERROR";
+            statusLabel.className = "status-badge status-offline";
+            addLog(`❌ Error: ${err.message}`);
+        });
+
+        function addLog(msg) {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `> ${msg}`;
+            logsContainer.prepend(entry);
+        }
+    </script>
+</body>
+</html>

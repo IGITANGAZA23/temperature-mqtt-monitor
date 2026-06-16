@@ -85,6 +85,13 @@ python pc_client/app.py
     *   **Port**: `1883`
     *   **Topic**: `igitangaza/temperature`
 
+## 📊 Live Monitoring Dashboard
+The project includes a web-based dashboard for remote metric visualization.
+*   **Local Access**: Open `pc_client/dashboard.html` in any modern web browser.
+*   **VPS Hosting**: Upload `dashboard.html` to your web server root (e.g., `/var/www/html`) to access it via `http://157.173.101.159/dashboard.html`.
+
+The dashboard uses MQTT over WebSockets to provide sub-second updates directly from the sensor pipeline.
+
 
 ## 📂 Project Structure
 ```
