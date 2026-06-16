@@ -64,10 +64,22 @@ pip install -r pc_client/requirements.txt
 python pc_client/app.py
 ```
 
-## 📡 Communication Protocol
-* **Serial**: 9600 Baud, 8-N-1.
-* **MQTT Broker**: `broker.hivemq.com` (Port 1883).
-* **MQTT Topic**: `rca/candidate/temperature`.
+## 📸 Screenshots
+### 1. Hardware Initialization & Temperature Display
+![LCD Display](screenshots/1.Uploading%20for%20Temperature%20Reading%20and%20LCD%20Display.png)
+
+### 2. PC Monitoring & MQTT Transmission
+![PC Client Monitoring](screenshots/2.Succesful%20PC%20Monitoring%20and%20MQTT%20Transmission%20in%20real%20time.png)
+
+## 📡 Communication Details
+*   **Serial Interface**: 
+    *   **Port**: `COM7` (Arduino Uno)
+    *   **Baud Rate**: `9600 bps`
+*   **MQTT Configuration**:
+    *   **Broker**: `broker.hivemq.com`
+    *   **Port**: `1883`
+    *   **Topic**: `rca/candidate/temperature`
+
 
 ## 📂 Project Structure
 ```
