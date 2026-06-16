@@ -6,7 +6,7 @@ import paho.mqtt.client as mqtt
 # IMPORTANT: Update SERIAL_PORT to match your active Arduino port (e.g., 'COM3', '/dev/ttyUSB0')
 SERIAL_PORT = 'COM7'  
 BAUD_RATE = 9600
-MQTT_BROKER = "broker.hivemq.com"  # Public test broker
+MQTT_BROKER = "157.173.101.159"  # School/Professional VPS IP
 MQTT_PORT = 1883
 MQTT_TOPIC = "igitangaza/temperature"
 

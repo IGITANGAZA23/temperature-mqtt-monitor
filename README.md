@@ -76,7 +76,7 @@ python pc_client/app.py
     *   **Port**: `COM7` (Arduino Uno)
     *   **Baud Rate**: `9600 bps`
 *   **MQTT Configuration**:
-    *   **Broker**: `broker.hivemq.com`
+    *   **Broker**: `157.173.101.159` (VPS)
     *   **Port**: `1883`
     *   **Topic**: `igitangaza/temperature`
 
