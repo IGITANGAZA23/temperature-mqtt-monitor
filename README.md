@@ -64,12 +64,17 @@ pip install -r pc_client/requirements.txt
 python pc_client/app.py
 ```
 
-## 📸 Screenshots
-### 1. Hardware Initialization & Temperature Display
+## 📸 Project Showcase
+
+### 1. Hardware Working & Wiring
+![Hardware Wiring](screenshots/0.Embedded%20Part%20Working%20-wire%20well%20connected.jpg)
+
+### 2. LCD Initialization & Temperature Display
 ![LCD Display](screenshots/1.Uploading%20for%20Temperature%20Reading%20and%20LCD%20Display.png)
 
-### 2. PC Monitoring & MQTT Transmission
-![PC Client Monitoring](screenshots/2.Succesful%20PC%20Monitoring%20and%20MQTT%20Transmission%20+%20VPS%20in%20real%20time.png)
+### 3. Final Deployment: Real-time VPS Monitoring
+![Final VPS Success](screenshots/3.Final%20Success%20Screenshot%20with%20real%20VPS.png)
+
 
 ## 📡 Communication Details
 *   **Serial Interface**: 
