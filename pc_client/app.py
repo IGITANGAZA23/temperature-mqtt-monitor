@@ -8,7 +8,7 @@ SERIAL_PORT = 'COM7'
 BAUD_RATE = 9600
 MQTT_BROKER = "broker.hivemq.com"  # Public test broker
 MQTT_PORT = 1883
-MQTT_TOPIC = "rca/candidate/temperature"
+MQTT_TOPIC = "igitangaza/temperature"
 
 # --- MQTT Client Initialization ---
 # For paho-mqtt 2.0+ we must specify the callback API version

@@ -78,7 +78,7 @@ python pc_client/app.py
 *   **MQTT Configuration**:
     *   **Broker**: `broker.hivemq.com`
     *   **Port**: `1883`
-    *   **Topic**: `rca/candidate/temperature`
+    *   **Topic**: `igitangaza/temperature`
 
 
 ## 📂 Project Structure
